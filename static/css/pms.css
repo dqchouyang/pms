@@ -1,0 +1,22 @@
+table tr:nth-child(even){
+    background-color: #dcdcdc;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+}
+
+.chat-image {
+    width: 100px;
+}
+
+
+.chat-message-top {
+    text-align: center;
+}
+
+.route-img {
+    width: 125px;
+    height:125px;
+}
