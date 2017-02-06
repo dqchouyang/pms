@@ -3,5 +3,5 @@
 使用的是python3.5
 
 
-# 管理员账号：admin
-# 密码：asdf1234
+管理员账号：admin
+密码：asdf1234

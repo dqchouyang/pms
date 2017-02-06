@@ -1,0 +1,49 @@
+{% extends 'lib/base.html' %}
+
+{% block header_tail %}
+    <link rel="stylesheet" href="/static/css/pms.css">
+{% endblock %}
+
+{% block content %}
+    <div class="box">
+        <div class="box-body">
+            <!-- form start -->
+            <form class="form-horizontal" action="{% url 'adminlte.department.create' %}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="manager" class="col-sm-2 control-label">负责人</label>
+                        <div class="col-sm-8">
+                            <select name="manager">
+                                <option value="0" selected="selected">无负责人</option>
+                                {% for emp in employees %}
+                                    <option value="{{ emp.id }}">{{ emp.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="parent" class="col-sm-2 control-label">上级部门</label>
+                        <div class="col-sm-8">
+                            <select name="parent">
+                                <option value="0" selected="selected">无上级部门</option>
+                                {% for dep in departments %}
+                                    <option value="{{ dep.id }}">{{ dep.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-info pull-right">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.box -->
+{% endblock %}

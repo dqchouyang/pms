@@ -1,4 +1,4 @@
-django-adminlte-admin==0.2.2
+django-adminlte-admin==0.4.1
 django-model-utils==2.2
 flake8==3.2.1
 Django==1.9.5

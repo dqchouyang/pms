@@ -1,0 +1,180 @@
+{% extends 'lib/base.html' %}
+
+{% block header_tail %}
+    <link rel="stylesheet" href="/static/css/pms.css">
+{% endblock %}
+
+{% block content %}
+    <div class="box">
+        <div class="box-body">
+            <!-- form start -->
+            <form class="form-horizontal" action="{% url 'adminlte.employee.create' %}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">姓名</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">身份证号</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">性别</label>
+                        <div class="col-sm-8">
+                            <select name="gender">
+                                <option value="0" selected="selected">男</option>
+                                <option value="1">女</option>
+                                <option value="2">保密</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">手机</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">家庭电话</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">头像</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">省</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">市</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">详细地址</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">出生日期</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">民族</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">学历</label>
+                        <div class="col-sm-3">
+                            <select name="education">
+                                <option value="0">初中</option>
+                                <option value="1">高中</option>
+                                <option value="2">大专</option>
+                                <option value="3" selected="selected">本科</option>
+                                <option value="4">硕士</option>
+                                <option value="5">博士</option>
+                                <option value="6">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">身高</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name" placeholder='CM'>
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">体重</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name" placeholder='KG'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">政治面貌</label>
+                        <div class="col-sm-3">
+                            <select name="political">
+                                <option value="0" selected="selected">群众</option>
+                                <option value="1">团员</option>
+                                <option value="2">党员/预备党员</option>
+                                <option value="3">民主党派</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">QQ号</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">微信</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">所属部门</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">职位</label>
+                        <div class="col-sm-3">
+                            <select name="position">
+                                <option value="7" selected="selected">员工</option>
+                                <option value="6">组长</option>
+                                <option value="5">副经理</option>
+                                <option value="4">经理</option>
+                                <option value="3">副总监</option>
+                                <option value="2">总监</option>
+                                <option value="1">副总裁</option>
+                                <option value="0">总裁</option>
+                                <option value="8">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">在职状态</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">工作经验</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">掌握技能</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">入职时间</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <label for="name" class="col-sm-2 control-label">离职时间</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-info pull-right">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.box -->
+{% endblock %}

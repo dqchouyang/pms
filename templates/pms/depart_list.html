@@ -1,0 +1,48 @@
+{% extends 'lib/base.html' %}
+
+{% block content %}
+    <div class="box">
+        <div class="box-header">
+            <form>
+                <div class="input-group input-group-sm">
+                    <input type="text" name="search" value="{{ pager.params.search }}" placeholder='请输入部门名' class="form-control">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-info btn-flat">查找</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th>名称</th>
+                    <th>负责人</th>
+                    <th>上级部门</th>
+                    <th>部门人数</th>
+                    <th>操作</th>
+                </tr>
+                {% for dep in pager.items %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'adminlte.department.edit' department_id=dep.id %}">
+                                {{ dep.name }}
+                            </a>
+                        </td>
+                        <td>{{ dep.get_leader }}</td>
+                        <td>{{ dep.parent | default:''}}</td>
+                        <td>{{ dep.get_count}}</td>
+                        <td><a href="javascript:void(0);" data-target='{{ dep.id }}' onclick="delete_object(this)">删除</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+            {% include 'adminlte/lib/_pagination.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_tail %}
+    <script src="/static/js/department.js"></script>
+{% endblock %}

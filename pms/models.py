@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django.db import models
+from django.utils import timezone
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
@@ -16,6 +17,12 @@ class Department(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def get_leader(self):
+        return Employee.objects.get(id=self.manager).name
+
+    def get_count(self):
+        return Employee.objects.filter(department=self.id).count()
 
 
 class Employee(TimeStampedModel):
@@ -60,17 +67,17 @@ class Employee(TimeStampedModel):
     tel = models.CharField(max_length=20, verbose_name='手机')
     home_tel = models.CharField(max_length=20, blank=True, null=True, verbose_name='家庭电话')
     picture = models.ImageField(null=True, blank=True, upload_to='avatar', verbose_name='头像')
-    province = models.IntegerField(default=0, verbose_name='省')
-    city = models.IntegerField(default=0, verbose_name='市')
+    province = models.CharField(max_length=80, verbose_name='省')
+    city = models.CharField(max_length=50, verbose_name='市')
     address = models.CharField(max_length=200, blank=True, null=True, verbose_name='详细地址')
     birth = models.DateTimeField(blank=True, null=True, verbose_name='出生日期')
-    nation = models.IntegerField(default=0, verbose_name='民族')
+    nation = models.CharField(max_length=50, verbose_name='民族')
     education = models.IntegerField(default=0, choices=EDUCATION_CHOICE, verbose_name='学历')
-    height = models.FloatField(default=0.0, verbose_name='升高', help_text='CM')
+    height = models.FloatField(default=0.0, verbose_name='身高', help_text='CM')
     weight = models.FloatField(default=0.0, verbose_name='体重', help_text='KG')
     political = models.IntegerField(default=0, choices=POLITICAL_CHOICE, verbose_name='政治面貌')
     identity_card = models.CharField(max_length=18, verbose_name='身份证号')
-    qq = models.IntegerField(blank=True, null=True, verbose_name='QQ号')
+    qq = models.CharField(max_length=20, blank=True, null=True, verbose_name='QQ号')
     mail = models.EmailField(blank=True, null=True, verbose_name='邮箱')
     wechat = models.CharField(max_length=50, blank=True, null=True, verbose_name='微信')
     joined = models.DateTimeField(default=datetime.now(), verbose_name='入职时间')
@@ -87,3 +94,9 @@ class Employee(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def get_department(self):
+        return Department.objects.get(id=self.department).name
+
+    def get_joined(self):
+        return timezone.localtime(self.joined).strftime('%Y-%m-%d %H:%M:%S')
