@@ -1,5 +1,8 @@
 人事管理系统（Personnel Management System）
 
+初始化系统数据：
+python manage.py init_data
+
 使用的是python3.5
 
 

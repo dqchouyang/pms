@@ -100,3 +100,82 @@ class Employee(TimeStampedModel):
 
     def get_joined(self):
         return timezone.localtime(self.joined).strftime('%Y-%m-%d %H:%M:%S')
+
+
+class RewardPunishLevel(TimeStampedModel):
+
+    level = models.CharField(max_length=50, verbose_name='奖惩等级')
+    title = models.CharField(max_length=50, verbose_name='奖惩内容')
+
+    class Meta:
+        verbose_name = '奖惩等级'
+        verbose_name_plural = '奖惩等级'
+
+    def __str__(self):
+        return self.title
+
+
+class RewardPunish(TimeStampedModel):
+    title = models.CharField(max_length=100, verbose_name='奖惩标题')
+    content = models.TextField(verbose_name='奖惩内容')
+    level = models.ForeignKey(RewardPunishLevel)
+    user = models.ForeignKey(Employee, verbose_name='奖惩人')
+    remark = models.CharField(max_length=100, verbose_name='备注', null=True, blank=True)
+
+    class Meta:
+        verbose_name = '奖惩'
+        verbose_name_plural = '奖惩'
+
+    def __str__(self):
+        return self.title
+
+
+class Train(TimeStampedModel):
+    title = models.CharField(max_length=100, verbose_name='培训主题')
+    content = models.TextField(blank=True, null=True, verbose_name='培训内容')
+    start = models.DateTimeField(verbose_name='开始时间')
+    end = models.DateTimeField(verbose_name='结束时间')
+    trainer = models.ForeignKey(Employee, verbose_name='培训师')
+    address = models.CharField(max_length=200, verbose_name='培训地点')
+
+    class Meta:
+        verbose_name = '培训'
+        verbose_name_plural = '培训'
+
+    def __str__(self):
+        return self.title
+
+
+class TrainEmployee(TimeStampedModel):
+    train = models.ForeignKey(Train, verbose_name='培训')
+    emp = models.ForeignKey(Employee, verbose_name='参与人')
+
+    class Meta:
+        verbose_name = '参与培训'
+        verbose_name_plural = '参与培训'
+
+    def __str__(self):
+        return self.train.title
+
+
+class Salary(TimeStampedModel):
+    emp = models.ForeignKey(Employee, verbose_name='员工')
+    amount = models.FloatField(default=0.0, verbose_name='总金额')
+    pension = models.FloatField(default=0.0, verbose_name='养老保险')
+    health = models.FloatField(default=0.0, verbose_name='医疗保险')
+    work = models.FloatField(default=0.0, verbose_name='失业保险')
+    birth = models.FloatField(default=0.0, verbose_name='生育保险')
+    house = models.FloatField(default=0.0, verbose_name='住房公积金')
+    tax = models.FloatField(default=0.0, verbose_name='扣税')
+    leave = models.FloatField(default=0.0, verbose_name='迟到早退')
+    no_work = models.FloatField(default=0.0, verbose_name='旷工')
+    due = models.FloatField(default=0.0, verbose_name='实发工资')
+    grant = models.BooleanField(default=False, verbose_name='是否发放')
+    remark = models.CharField(max_length=200, verbose_name='备注')
+
+    class Meta:
+        verbose_name = '薪资'
+        verbose_name_plural = '薪资'
+
+    def __str__(self):
+        return self.emp.name
