@@ -9,7 +9,6 @@ if (manager_id != 'None'){
 }
 
 var parent_id = $('#parent').data('target');
-console.log(parent_id);
 if (parent_id != ''){
     $('#parent').val(parent_id);
 }

@@ -1,5 +1,5 @@
 from django import forms
-from pms.models import Department, Employee
+from pms.models import Department, Employee, RewardPunishLevel, RewardPunish
 
 
 class DepartmentForm(forms.ModelForm):
@@ -20,3 +20,17 @@ class EmployeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EmployeeForm, self).__init__(*args, **kwargs)
+
+
+class LevelForm(forms.ModelForm):
+
+    class Meta:
+        model = RewardPunishLevel
+        fields = ('level', 'title')
+
+
+class RewardPunishForm(forms.ModelForm):
+
+    class Meta:
+        model = RewardPunish
+        fields = ('title', 'content', 'level', 'user', 'remark')

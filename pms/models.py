@@ -114,6 +114,9 @@ class RewardPunishLevel(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def all_name(self):
+        return '{0}:{1}'.format(self.level, self.title)
+
 
 class RewardPunish(TimeStampedModel):
     title = models.CharField(max_length=100, verbose_name='奖惩标题')
