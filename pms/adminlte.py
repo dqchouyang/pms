@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from pms.forms import DepartmentForm, EmployeeForm, LevelForm, RewardPunishForm
-from pms.models import Department, Employee, RewardPunishLevel, RewardPunish
+from pms.forms import DepartmentForm, EmployeeForm, LevelForm, RewardPunishForm, SalaryForm, TrainForm
+from pms.models import Department, Employee, RewardPunishLevel, RewardPunish, Train, Salary
 from adminlte.utils import Pager, AdminLTEBaseView, AdminMenu
 
 
@@ -301,4 +301,160 @@ class RewardPunishDeleteView(AdminLTEBaseView):
         punish_id = kwargs.get('punish_id')
         punish = self.class_model.objects.get(id=punish_id)
         punish.delete()
+        return JsonResponse(dict(code=0, result='OK'))
+
+
+class TrainCreateView(AdminLTEBaseView):
+    menu = AdminMenu("培训新增", parent_menu=train_menu, sort=5099)
+
+    def get(self, request, *args, **kwargs):
+        employees = Employee.objects.all()
+        return render(request, 'pms/train_create.html',
+                      context={"employees": employees})
+
+    def post(self, request, *args, **kwargs):
+        form = TrainForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('adminlte.train')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+            return redirect('adminlte.train.create')
+
+
+class TrainView(AdminLTEBaseView):
+    menu = AdminMenu("培训列表", parent_menu=train_menu, sort=5098)
+
+    def get(self, request, *args, **kwargs):
+        search = request.GET.get('search')
+        query = Train.objects.order_by('-created').all()
+
+        if search:
+            query = query.filter(title__contains=search)
+
+        pager = Pager.from_request(query, request)
+        return render(request, 'pms/train_list.html', context={"pager": pager})
+
+
+class TrainEditView(AdminLTEBaseView):
+
+    class_model = Train
+    _regex_name = '^train/(?P<train_id>\d+)/edit/'
+
+    def get(self, request, *args, **kwargs):
+        train_id = kwargs.get('train_id')
+        train = self.class_model.objects.get(id=train_id)
+        employees = Employee.objects.all()
+        levels = RewardPunishLevel.objects.all()
+        return render(request, 'pms/train_edit.html',
+                      context={"train": train, "employees": employees, "levels": levels})
+
+    def post(self, request, *args, **kwargs):
+        train_id = kwargs.get('train_id')
+        form = TrainForm(request.POST)
+        if form.is_valid():
+            instance = self.class_model.objects.get(id=train_id)
+            instance.title = request.POST.get('title')
+            instance.content = request.POST.get('content')
+            instance.level = RewardPunishLevel.objects.get(id=request.POST.get('level'))
+            instance.user = Employee.objects.get(id=request.POST.get('user'))
+            instance.remark = request.POST.get('remark')
+            instance.save()
+            return redirect('adminlte.train')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+            return redirect('adminlte.train.edit')
+
+
+class TrainDeleteView(AdminLTEBaseView):
+
+    class_model = Train
+    _regex_name = '^train/(?P<train_id>\d+)/delete/'
+
+    def post(self, request, *args, **kwargs):
+        train_id = kwargs.get('train_id')
+        train = self.class_model.objects.get(id=train_id)
+        train.delete()
+        return JsonResponse(dict(code=0, result='OK'))
+
+
+class SalaryCreateView(AdminLTEBaseView):
+    menu = AdminMenu("薪资新增", parent_menu=salary_menu, sort=4099)
+
+    def get(self, request, *args, **kwargs):
+        employees = Employee.objects.all()
+        return render(request, 'pms/salary_create.html',
+                      context={"employees": employees})
+
+    def post(self, request, *args, **kwargs):
+        form = SalaryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('adminlte.salary')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+            return redirect('adminlte.salary.create')
+
+
+class SalaryView(AdminLTEBaseView):
+    menu = AdminMenu("薪资列表", parent_menu=salary_menu, sort=4098)
+
+    def get(self, request, *args, **kwargs):
+        search = request.GET.get('search')
+        query = Salary.objects.order_by('-created').all()
+
+        if search:
+            query = query.filter(emp__name__contains=search)
+
+        pager = Pager.from_request(query, request)
+        return render(request, 'pms/salary_list.html', context={"pager": pager})
+
+
+class SalaryEditView(AdminLTEBaseView):
+
+    class_model = Salary
+    _regex_name = '^salary/(?P<salary_id>\d+)/edit/'
+
+    def get(self, request, *args, **kwargs):
+        salary_id = kwargs.get('salary_id')
+        salary = self.class_model.objects.get(id=salary_id)
+        employees = Employee.objects.all()
+        levels = RewardPunishLevel.objects.all()
+        return render(request, 'pms/salary_edit.html',
+                      context={"salary": salary, "employees": employees, "levels": levels})
+
+    def post(self, request, *args, **kwargs):
+        salary_id = kwargs.get('salary_id')
+        form = SalaryForm(request.POST)
+        if form.is_valid():
+            instance = self.class_model.objects.get(id=salary_id)
+            instance.emp = Employee.objects.get(id=request.POST.get('emp'))
+            instance.amount = request.POST.get('amount')
+            instance.pension = request.POST.get('pension')
+            instance.health = request.POST.get('health')
+            instance.work = request.POST.get('work')
+            instance.birth = request.POST.get('birth')
+            instance.house = request.POST.get('house')
+            instance.tax = request.POST.get('tax')
+            instance.leave = request.POST.get('leave')
+            instance.no_work = request.POST.get('no_work')
+            instance.due = request.POST.get('due')
+            instance.remark = request.POST.get('remark')
+            instance.grant = True if request.POST.get('grant', None) else False
+            instance.save()
+            return redirect('adminlte.salary')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+            return redirect('adminlte.salary.edit')
+
+
+class SalaryDeleteView(AdminLTEBaseView):
+
+    class_model = Salary
+    _regex_name = '^salary/(?P<salary_id>\d+)/delete/'
+
+    def post(self, request, *args, **kwargs):
+        salary_id = kwargs.get('salary_id')
+        salary = self.class_model.objects.get(id=salary_id)
+        salary.delete()
         return JsonResponse(dict(code=0, result='OK'))

@@ -182,3 +182,9 @@ class Salary(TimeStampedModel):
 
     def __str__(self):
         return self.emp.name
+
+    def get_created(self):
+        return timezone.localtime(self.created).strftime('%Y-%m-%d')
+
+    def get_grant(self):
+        return '是' if self.grant else '否'

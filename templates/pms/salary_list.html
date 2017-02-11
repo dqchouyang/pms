@@ -1,0 +1,70 @@
+{% extends 'lib/base.html' %}
+
+{% block content %}
+    <div class="box">
+        <div class="box-header">
+            <form>
+                <div class="input-group input-group-sm">
+                    <input type="text" name="search" value="{{ pager.params.search }}" placeholder='请输入员工姓名' class="form-control">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-info btn-flat">查找</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th>员工</th>
+                    <th>总金额</th>
+                    <th>养老保险</th>
+                    <th>医疗保险</th>
+                    <th>失业保险</th>
+                    <th>生育保险</th>
+                    <th>公积金</th>
+                    <th>扣税</th>
+                    <th>迟到早退</th>
+                    <th>旷工</th>
+                    <th>实发工资</th>
+                    <th>是否发放</th>
+                    <th>时间</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+                {% for salary in pager.items %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'adminlte.salary.edit' salary_id=salary.id %}">
+                                {{ salary.emp.name }}
+                            </a>
+                        </td>
+                        <td>{{ salary.amount }}</td>
+                        <td>{{ salary.pension }}</td>
+                        <td>{{ salary.health }}</td>
+                        <td>{{ salary.work }}</td>
+                        <td>{{ salary.birth }}</td>
+                        <td>{{ salary.house }}</td>
+                        <td>{{ salary.tax }}</td>
+                        <td>{{ salary.leave }}</td>
+                        <td>{{ salary.no_work }}</td>
+                        <td>{{ salary.due }}</td>
+                        <td>{{ salary.get_grant }}</td>
+                        <td>{{ salary.get_created }}</td>
+                        <td>{{ salary.remark }}</td>
+                        <td>
+                            <a href="javascript:void(0);" data-target='{{ salary.id }}' onclick="delete_salary(this)">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+            {% include 'adminlte/lib/_pagination.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_tail %}
+    <script src="/static/js/salary.js"></script>
+{% endblock %}

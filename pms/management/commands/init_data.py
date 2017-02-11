@@ -18,5 +18,5 @@ class Command(BaseCommand):
             {"level": "第五级(惩)", "title": "警告"},
         ]
         for d in data:
-            RewardPunishLevel.objects.create(level=d['level'], title=d['title'])
+            RewardPunishLevel.objects.get_or_create(level=d['level'], title=d['title'])
         print('初始化数据完成')
