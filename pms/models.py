@@ -148,6 +148,12 @@ class Train(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def get_start(self):
+        return self.start.strftime('%Y-%m-%d %H:%M:%S')
+
+    def get_end(self):
+        return self.end.strftime('%Y-%m-%d %H:%M:%S')
+
 
 class TrainEmployee(TimeStampedModel):
     train = models.ForeignKey(Train, verbose_name='培训')
