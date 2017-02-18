@@ -20,6 +20,7 @@
                     <th>开始时间</th>
                     <th>结束时间</th>
                     <th>讲师</th>
+                    <th>参加人数</th>
                     <th>地点</th>
                     <th>操作</th>
                 </tr>
@@ -34,6 +35,7 @@
                         <td>{{ train.get_start }}</td>
                         <td>{{ train.get_end }}</td>
                         <td>{{ train.trainer }}</td>
+                        <td>{{ train.join_count }}</td>
                         <td>{{ train.address }}</td>
                         <td>
                             <a href="javascript:void(0);" data-target='{{ train.id }}' onclick="delete_salary(this)">删除</a>

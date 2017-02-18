@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from pms.forms import DepartmentForm, EmployeeForm, LevelForm, RewardPunishForm, SalaryForm, TrainForm
-from pms.models import Department, Employee, RewardPunishLevel, RewardPunish, Train, Salary
+from pms.models import Department, Employee, RewardPunishLevel, RewardPunish, Train, Salary, TrainEmployee
 from adminlte.utils import Pager, AdminLTEBaseView, AdminMenu
 
 
@@ -344,10 +344,14 @@ class TrainEditView(AdminLTEBaseView):
     def get(self, request, *args, **kwargs):
         train_id = kwargs.get('train_id')
         train = self.class_model.objects.get(id=train_id)
-        employees = Employee.objects.all()
+        train_emps = TrainEmployee.objects.filter(train_id=train_id)
+        train_emps_ids = train_emps.values_list('emp_id', flat=True)
+        trainers = Employee.objects.all()
+        employees = Employee.objects.exclude(id__in=train_emps_ids)
         levels = RewardPunishLevel.objects.all()
         return render(request, 'pms/train_edit.html',
-                      context={"train": train, "employees": employees, "levels": levels})
+                      context={"train": train, "employees": employees, "levels": levels,
+                               "train_emps": train_emps, "trainers": trainers})
 
     def post(self, request, *args, **kwargs):
         train_id = kwargs.get('train_id')
@@ -356,9 +360,10 @@ class TrainEditView(AdminLTEBaseView):
             instance = self.class_model.objects.get(id=train_id)
             instance.title = request.POST.get('title')
             instance.content = request.POST.get('content')
-            instance.level = RewardPunishLevel.objects.get(id=request.POST.get('level'))
-            instance.user = Employee.objects.get(id=request.POST.get('user'))
-            instance.remark = request.POST.get('remark')
+            instance.start = request.POST.get('start')
+            instance.end = request.POST.get('end')
+            instance.trainer = Employee.objects.get(id=request.POST.get('trainer'))
+            instance.address = request.POST.get('address')
             instance.save()
             return redirect('adminlte.train')
         else:
@@ -375,6 +380,37 @@ class TrainDeleteView(AdminLTEBaseView):
         train_id = kwargs.get('train_id')
         train = self.class_model.objects.get(id=train_id)
         train.delete()
+        return JsonResponse(dict(code=0, result='OK'))
+
+
+class TrainEmployeeBatchView(AdminLTEBaseView):
+
+    class_model = TrainEmployee
+    _regex_name = 'train/employee/(?P<train_id>\d+)/batch/'
+
+    def post(self, request, *args, **kwargs):
+        print("====", request.POST)
+        train_id = kwargs.get('train_id')
+        emp_ids = request.POST.get('emp_ids')
+        try:
+            emp_ids = emp_ids.split(',')
+            emp_ids = [emp_id for emp_id in emp_ids if emp_id]
+        except:
+            return JsonResponse(dict(code=10050, message='emp_ids illegal'))
+        flag = request.POST.get('flag', None)
+        if flag not in ['on', 'off']:
+            return JsonResponse(dict(code=10051, message='flag illegal'))
+
+        if flag == 'on':
+            for employee_id in emp_ids:
+                try:
+                    self.class_model.objects.get_or_create(train_id=train_id, emp_id=employee_id)
+                except:
+                    pass
+        else:
+            print("-----", self.class_model.objects.filter(train_id=train_id).filter(emp_id__in=emp_ids))
+            self.class_model.objects.filter(train_id=train_id).filter(emp_id__in=emp_ids).delete()
+
         return JsonResponse(dict(code=0, result='OK'))
 
 

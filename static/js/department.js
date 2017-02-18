@@ -1,8 +1,3 @@
-/**
- * Created by zhangli on 2017/1/28.
- */
-
-
 var manager_id = $('#manager').data('target');
 if (manager_id != 'None'){
     $('#manager').val(manager_id);

@@ -1,8 +1,3 @@
-/**
- * Created by zhangli on 2017/2/11.
- */
-
-
 var level_id = $('#level').data('target');
 if (level_id != 'None'){
     $('#level').val(level_id);

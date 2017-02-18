@@ -149,10 +149,13 @@ class Train(TimeStampedModel):
         return self.title
 
     def get_start(self):
-        return self.start.strftime('%Y-%m-%d %H:%M:%S')
+        return timezone.localtime(self.start).strftime('%Y-%m-%d %H:%M:%S')
 
     def get_end(self):
-        return self.end.strftime('%Y-%m-%d %H:%M:%S')
+        return timezone.localtime(self.end).strftime('%Y-%m-%d %H:%M:%S')
+
+    def join_count(self):
+        return TrainEmployee.objects.filter(train=self).count()
 
 
 class TrainEmployee(TimeStampedModel):

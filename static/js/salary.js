@@ -1,8 +1,3 @@
-/**
- * Created by zhangli on 2017/2/11.
- */
-
-
 var emp_id = $('#emp').data('target');
 console.log(emp_id);
 if (emp_id != 'None'){
