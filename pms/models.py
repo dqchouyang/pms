@@ -70,7 +70,7 @@ class Employee(TimeStampedModel):
     province = models.CharField(max_length=80, verbose_name='省')
     city = models.CharField(max_length=50, verbose_name='市')
     address = models.CharField(max_length=200, blank=True, null=True, verbose_name='详细地址')
-    birth = models.DateTimeField(blank=True, null=True, verbose_name='出生日期')
+    birth = models.DateField(blank=True, null=True, verbose_name='出生日期')
     nation = models.CharField(max_length=50, verbose_name='民族')
     education = models.IntegerField(default=0, choices=EDUCATION_CHOICE, verbose_name='学历')
     height = models.FloatField(default=0.0, verbose_name='身高', help_text='CM')
@@ -96,10 +96,25 @@ class Employee(TimeStampedModel):
         return self.name
 
     def get_department(self):
-        return Department.objects.get(id=self.department).name
+        if self.department:
+            return Department.objects.get(id=self.department).name
+        else:
+            return ""
+
+    def get_birth(self):
+        if self.birth:
+            return self.birth.strftime('%Y-%m-%d')
+        return ""
 
     def get_joined(self):
-        return timezone.localtime(self.joined).strftime('%Y-%m-%d %H:%M:%S')
+        if self.joined:
+            return timezone.localtime(self.joined).strftime('%Y-%m-%d %H:%M:%S')
+        return ""
+
+    def get_leave(self):
+        if not self.leave:
+            return ""
+        return timezone.localtime(self.leave).strftime('%Y-%m-%d %H:%M:%S')
 
 
 class RewardPunishLevel(TimeStampedModel):

@@ -16,10 +16,9 @@ class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ('name', 'gender', 'tel', 'province', 'city', 'nation', 'education', 'identity_card', 'joined')
-
-    def __init__(self, *args, **kwargs):
-        super(EmployeeForm, self).__init__(*args, **kwargs)
+        fields = ('name', 'gender', 'tel', 'home_tel', 'picture', 'province', 'city', 'address', 'birth', 'nation',
+                  'education', 'height', 'weight', 'political', 'identity_card', 'qq', 'mail', 'wechat', 'joined',
+                  'leave', 'department', 'position', 'status', 'experience', 'skill')
 
 
 class LevelForm(forms.ModelForm):

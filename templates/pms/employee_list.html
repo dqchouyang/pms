@@ -27,7 +27,7 @@
                 {% for emp in pager.items %}
                     <tr>
                         <td>
-                            <a href="{% url 'adminlte.employee.detail' employee_id=emp.id %}">
+                            <a href="{% url 'adminlte.employee.edit' employee_id=emp.id %}">
                                 {{ emp.name }}
                             </a>
                         </td>

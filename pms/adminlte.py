@@ -120,28 +120,28 @@ class EmployeeView(AdminLTEBaseView):
                       context={"pager": pager})
 
 
-class EmployeeDetailView(AdminLTEBaseView):
+class EmployeeEditView(AdminLTEBaseView):
 
     class_model = Employee
-    _regex_name = '^employee/(?P<employee_id>\d+)/detail/'
+    _regex_name = '^employee/(?P<employee_id>\d+)/edit/'
 
     def get(self, request, *args, **kwargs):
         employee_id = kwargs.get('employee_id')
-        emps = self.class_model.objects.get(id=employee_id)
-        return render(request, 'pms/employee_detail.html',
-                      context=dict(pager=emps))
+        emp = self.class_model.objects.get(id=employee_id)
+        departments = Department.objects.all()
+        return render(request, 'pms/employee_edit.html',
+                      context={"departments": departments, 'emp': emp})
 
-    # def post(self, request, club_id, *args, **kwargs):
-    #     club = self.class_model.objects.get(id=club_id)
-    #     form = ClubForm(request.POST, instance=club)
-    #     if form.is_valid():
-    #         form.save()
-    #         messages.add_message(request, messages.SUCCESS, '修改成功')
-    #         return redirect('speedx_admin.club')
-    #
-    #     messages.add_message(request, messages.ERROR, '参数错误')
-    #
-    #     return render(request, 'speedx_admin/clubs/club_list.html')
+    def post(self, request, employee_id, *args, **kwargs):
+        emp = self.class_model.objects.get(id=employee_id)
+        form = EmployeeForm(data=request.POST, files=request.FILES, instance=emp)
+        if form.is_valid():
+            form.save()
+            return redirect('adminlte.employee')
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+            departments = Department.objects.all()
+            return render(request, 'pms/employee_edit.html', context={"departments": departments, 'emp': emp})
 
 
 class EmployeeCreateView(AdminLTEBaseView):
@@ -154,12 +154,14 @@ class EmployeeCreateView(AdminLTEBaseView):
                       context={"departments": departments})
 
     def post(self, request, *args, **kwargs):
-        form = EmployeeForm(request.POST)
+        form = EmployeeForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            pass
+            form.save()
+            return redirect('adminlte.employee')
         else:
             messages.add_message(request, messages.ERROR, form.errors)
-        return redirect('adminlte.employee')
+            departments = Department.objects.all()
+            return render(request, 'pms/employee_create.html', context={"departments": departments})
 
 
 class RewardLevelCreateView(AdminLTEBaseView):
@@ -389,7 +391,6 @@ class TrainEmployeeBatchView(AdminLTEBaseView):
     _regex_name = 'train/employee/(?P<train_id>\d+)/batch/'
 
     def post(self, request, *args, **kwargs):
-        print("====", request.POST)
         train_id = kwargs.get('train_id')
         emp_ids = request.POST.get('emp_ids')
         try:
@@ -408,7 +409,6 @@ class TrainEmployeeBatchView(AdminLTEBaseView):
                 except:
                     pass
         else:
-            print("-----", self.class_model.objects.filter(train_id=train_id).filter(emp_id__in=emp_ids))
             self.class_model.objects.filter(train_id=train_id).filter(emp_id__in=emp_ids).delete()
 
         return JsonResponse(dict(code=0, result='OK'))

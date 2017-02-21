@@ -8,3 +8,6 @@ python manage.py init_data
 
 管理员账号：admin
 密码：asdf1234
+
+# _main_sidebar.html 改了一行
+# adminlte/adminlte.py 改了几行
