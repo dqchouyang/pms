@@ -1,7 +1,6 @@
 {% extends 'lib/base.html' %}
 
 {% block header_tail %}
-    <link rel="stylesheet" href="/static/css/pms.css">
     <link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css" />
 {% endblock %}
 
@@ -9,7 +8,7 @@
     <div class="box">
         <div class="box-body">
             <!-- form start -->
-            <form class="form-horizontal" action="{{ adminlte.train }}" method="post">
+            <form class="form-horizontal" action="{% url 'adminlte.train.create' %}" method="post">
                 <div class="box-body">
                     <div class="form-group">
                         <label for="title" class="col-sm-2 control-label">培训主题</label>
@@ -64,7 +63,6 @@
 {% endblock %}
 
 {% block body_tail %}
-    <script src="/static/js/jquery.js"></script>
     <script src="/static/js/jquery.datetimepicker.full.min.js"></script>
     <script>
         $.datetimepicker.setLocale('ch');

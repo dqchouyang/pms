@@ -76,3 +76,20 @@ function change_off_employees() {
         }
     });
 }
+
+
+function delete_salary(e){
+    var salary_id = e.getAttribute('data-target');
+    $.ajax({
+        url: 'salary/' + salary_id + '/delete/',
+        type: 'POST',
+        data: {},
+        success: function (result) {
+            if (result.code == 0){
+                window.location = '/salary';
+            }else{
+                alert(result.message);
+            }
+        }
+    });
+}

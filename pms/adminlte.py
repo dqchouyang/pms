@@ -73,7 +73,8 @@ class DepartmentEditView(AdminLTEBaseView):
                       context={"employees": employees, "departments": departments,
                                "department": department})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, department_id, *args, **kwargs):
+        instance = self.class_model.objects.get(id=department_id)
         form = DepartmentForm(request.POST)
         if form.is_valid():
             manager = request.POST.get('manager')
@@ -84,9 +85,10 @@ class DepartmentEditView(AdminLTEBaseView):
                 parent = None
             else:
                 parent = Department.objects.get(id=parent)
-            Department.objects.create(name=form.cleaned_data['name'],
-                                      manager=manager,
-                                      parent=parent)
+            instance.name = form.cleaned_data['name']
+            instance.manager = manager
+            instance.parent = parent
+            instance.save()
         else:
             messages.add_message(request, messages.ERROR, form.errors)
         return redirect('adminlte.department')

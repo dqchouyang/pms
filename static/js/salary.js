@@ -1,5 +1,4 @@
 var emp_id = $('#emp').data('target');
-console.log(emp_id);
 if (emp_id != 'None'){
     $('#emp').val(emp_id);
 }
